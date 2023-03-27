@@ -50,7 +50,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-app.use("/api/user", productRoute);
+app.use("/api/product", productRoute);
 
 app.listen(PORT, () => {
   console.log(`Sever is running on the port:`, PORT);
