@@ -1,5 +1,3 @@
-{
-  "products":
 [
   {
     "productId": "00000001",
@@ -360,6 +358,35 @@
     "scrumMasterName": "Charlotte",
     "startDate": "2023/04/01",
     "methodology": "Waterfall"
+  },
+  {
+    "productId": "04266631",
+    "productName": "new product",
+    "productOwnerName": "Lucie",
+    "Developers": [
+      "Jacky",
+      "Joan",
+      "Nicho",
+      "Nina",
+      "Shean"
+    ],
+    "scrumMasterName": "Kelly",
+    "startDate": "2023/03/28",
+    "methodology": "Waterfall"
+  },
+  {
+    "productId": "81389178",
+    "productName": "new product",
+    "productOwnerName": "Lucie",
+    "Developers": [
+      "Jacky",
+      "Joan",
+      "Nicho",
+      "Nina",
+      "Shean"
+    ],
+    "scrumMasterName": "Kelly",
+    "startDate": "2023/03/28",
+    "methodology": "Waterfall"
   }
 ]
-}
