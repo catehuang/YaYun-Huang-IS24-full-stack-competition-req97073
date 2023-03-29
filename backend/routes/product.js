@@ -1,8 +1,9 @@
 import express from "express";
-import { nanoid } from "nanoid"
+import { customAlphabet } from "nanoid";
 
 const router = express.Router();
 const idLength = 8;
+const nanoid = customAlphabet("1234567890", idLength);
 
 /**
  * @swagger
@@ -73,153 +74,206 @@ const idLength = 8;
  *                 $ref: '#/components/schemas/Product'
  */
 
-router.get('/', (req, res) => {
-  const products = req.app.get("products")["products"]
-  
+router.get("/", (req, res) => {
+  const products = req.app.db.data;
+
   res.send(products);
 });
 
-  /**
-   * @swagger
-   * /product/{productId}:
-   *   get:
-   *     summary: Get the product story by id
-   *     tags: [Products]
-   *     parameters:
-   *       - in: path
-   *         name: productId
-   *         schema:
-   *           type: string
-   *         required: true
-   *         description: The product id
-   *     responses:
-   *       200:
-   *         description: The product description by id
-   *         contents:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/product'
-   *       404:
-   *         description: The product was not found
-   */
+/**
+ * @swagger
+ * /product/{productId}:
+ *   get:
+ *     summary: Get the product story by productId
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The product id
+ *     responses:
+ *       200:
+ *         description: The product description by productId
+ *         contents:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: The product was not found
+ */
 
 router.get("/:productId", (req, res) => {
-  const product = req.app.get("products").find({ id: req.params.id }).value();
-  if (!product) {
-    res.sendStatus(404)
+  const foundProduct = req.app.db.data.find(
+    (product) => parseInt(product.productId) === parseInt(req.params.productId)
+  );
+
+  if (!foundProduct) {
+    res.sendStatus(404);
   }
-  res.send(product);
+  res.send(foundProduct);
 });
 
-  /**
-   * @swagger
-   * /product:
-   *   post:
-   *     summary: Create a new product
-   *     tags: [Products]
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             $ref: '#/components/schemas/product'
-   *     responses:
-   *       200:
-   *         description: The product was successfully created
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/product'
-   *       500:
-   *         description: Some server error
-   */
+/**
+ * @swagger
+ * /product/:
+ *   post:
+ *     summary: Create a new product
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: The product was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Some server error
+ */
 
-   router.post("/", (req, res) => {
-    try {
-      const product = {
-        id: nanoid(idLength),
-        ...req.body,
-      };
+router.post("/", (req, res) => {
+  try {
+    const product = {
+      productId: nanoid(),
+      productName: req.body.productName,
+      productOwnerName: req.body.productOwnerName,
+      Developers: req.body.Developers,
+      scrumMasterName: req.body.scrumMasterName,
+      startDate: req.body.startDate,
+      methodology: req.body.methodology,
+    };
 
-      req.app.get("product").push(product).write();
+    req.app.db.data.push(product);
+    req.app.db.write();
 
-      res.send(product);
-    } catch (error) {
-      return res.status(500).send(error);
+    /* verify data
+    const products = req.app.db.data
+    console.log(products)
+    */
+    res.send(product);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+/**
+ * @swagger
+ * /product/{productId}:
+ *  put:
+ *    summary: Update the product by productId
+ *    tags: [Products]
+ *    parameters:
+ *      - name: productId
+ *        in: path
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The product id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Product'
+ *    responses:
+ *      200:
+ *        description: The product was updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Product'
+ *      404:
+ *        description: The product was not found
+ *      500:
+ *        description: Some error happened
+ */
+
+router.put("/:productId", (req, res) => {
+  try {
+    const products = req.app.db.data;
+    const index = products.findIndex(
+      (product) =>
+        parseInt(product.productId) === parseInt(req.params.productId)
+    );
+
+    if (index === -1) {
+      res.sendStatus(404);
     }
-  });
 
-  /**
-   * @swagger
-   * /product/{productId}:
-   *  put:
-   *    summary: Update the product by id
-   *    tags: [Products]
-   *    parameters:
-   *      - in: path
-   *        name: id
-   *        schema:
-   *          type: string
-   *        required: true
-   *        description: The product id
-   *    requestBody:
-   *      required: true
-   *      content:
-   *        application/json:
-   *          schema:
-   *            $ref: '#/components/schemas/product'
-   *    responses:
-   *      200:
-   *        description: The product was updated
-   *        content:
-   *          application/json:
-   *            schema:
-   *              $ref: '#/components/schemas/product'
-   *      404:
-   *        description: The product was not found
-   *      500:
-   *        description: Some error happened
-   */
+    let foundProduct = products[index];
+    foundProduct = {
+      productId: req.params.productId,
+      productName: req.body.productName,
+      productOwnerName: req.body.productOwnerName,
+      Developers: req.body.Developers,
+      scrumMasterName: req.body.scrumMasterName,
+      startDate: req.body.startDate,
+      methodology: req.body.methodology,
+    };
+    req.app.db.data.splice(index, 1);
+    req.app.db.data.push(foundProduct);
+    req.app.db.write();
 
-  router.put("/:productId", (req, res) => {
-    try {
-      req.app.db
-        .get("product")
-        .find({ id: req.params.id })
-        .assign(req.body)
-        .write();
+    const newProduct = req.app.db.data.find(
+      (product) =>
+        parseInt(product.productId) === parseInt(req.params.productId)
+    );
 
-      res.send(req.app.get("product").find({ id: req.params.id }));
-    } catch (error) {
-      return res.status(500).send(error);
+    res.send(newProduct);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+/**
+ * @swagger
+ * /product/{productId}:
+ *  delete:
+ *     summary: Remove the product by productId
+ *     tags: [Products]
+ *     parameters:
+ *       - name: productId
+ *         in: path
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The product id
+ *
+ *     responses:
+ *       200:
+ *         description: The product was deleted
+ *       404:
+ *         description: The product was not found
+ *       500:
+ *        description: Some error happened
+ */
+
+router.delete("/:productId", (req, res) => {
+  try {
+    const products = req.app.db.data;
+    const index = products.findIndex(
+      (product) =>
+        parseInt(product.productId) === parseInt(req.params.productId)
+    );
+
+    if (index === -1) {
+      res.sendStatus(404);
     }
-  });
 
-  /**
-   * @swagger
-   * /product/{productId}:
-   *   delete:
-   *     summary: Remove the product by id
-   *     tags: [Products]
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         schema:
-   *           type: string
-   *         required: true
-   *         description: The product id
-   *
-   *     responses:
-   *       200:
-   *         description: The product was deleted
-   *       404:
-   *         description: The product was not found
-   */
-
-  router.delete("/:productId", (req, res) => {
-    req.app.get("product").remove({ id: req.params.id }).write();
+    req.app.db.data.splice(index, 1);
+    req.app.db.write();
 
     res.sendStatus(200);
-  });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
 
 export default router;
