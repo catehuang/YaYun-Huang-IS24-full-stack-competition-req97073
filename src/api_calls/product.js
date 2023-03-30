@@ -31,7 +31,7 @@ export const AddNewProduct = async(product) => {
 
 export const UpdateProduct = async (product) => {
   try {
-    const response = await axiosAuth.put(`/product/${product.productId}`, {
+    const response = await axios.put(`/product/${product.productId}`, {
       product,
     });
     return response.data
