@@ -140,8 +140,13 @@ router.get("/:productId", (req, res) => {
 
 router.post("/", (req, res) => {
   try {
+    let genId = nanoid()
+    while (req.app.db.data.find(
+      (product) => parseInt(product.productId) === parseInt(genId))) {
+        genId = nanoid()
+      }
     const product = {
-      productId: nanoid(),
+      productId: genId,
       productName: req.body.productName,
       productOwnerName: req.body.productOwnerName,
       Developers: req.body.Developers,
