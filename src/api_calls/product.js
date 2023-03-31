@@ -30,9 +30,11 @@ export const AddNewProduct = async(product) => {
 }
 
 export const UpdateProduct = async (product) => {
+  const {productId, ...others} = product
+
   try {
-    const response = await axios.put(`/product/${product.productId}`, {
-      product,
+    const response = await axios.put(`/product/${productId}`, {
+      ...others,
     });
     return response.data
   } catch (error) {
