@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 const file = "./db.json";
 
 const names = [
@@ -212,7 +212,7 @@ let productOwnerName = "";
 let Developers = [];
 let scrumMasterName = "";
 let startDate = "";
-let year = 2020;
+let year = 2021;
 let month = 0;
 let date = "01";
 let methodology = "";
