@@ -19,9 +19,10 @@ export const GetProduct = async (productId) => {
 };
 
 export const AddNewProduct = async(product) => {
+  console.log(product)
   try {
       const response = await axios.post('/product', {
-        product
+        ...product
       });
       return response.data;
     } catch (error) {
