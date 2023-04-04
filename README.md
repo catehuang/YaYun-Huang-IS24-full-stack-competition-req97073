@@ -5,3 +5,11 @@
 * Run programs
   - Change to backend folder to run server (node server.js). The server will run on port 3000
   - Move back to main folder to run frontend (npm start). The frontend will run in port 3001
+  
+  
+## Functions
+* List all products stored in a file (db.json)
+* Unauthorized users can add new products after filling in all required information (except the product Id)
+* Unauthorized users can edit product related information except the product Id
+* Can search for a specific Scrum Master and see all products related to the Scrum Master and a total number of related products
+* Can search for a specific developer and see all products related to the developer and a total number of related products
