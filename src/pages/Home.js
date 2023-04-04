@@ -11,7 +11,7 @@ import ReadOnlyForm from "../components/ReadOnlyForm.js";
 
 function Home() {
   const [products, setProducts] = useState([]);
-  const [showProducts, setShowProducts] = useState(products);
+  const [showProducts, setShowProducts] = useState([]);
   const [searchScrumMaster, setSearchScrumMaster] = useState("");
   const [searchDeveloper, setSearchDeveloper] = useState("");
   const [editProductId, setEditProductId] = useState(null);
@@ -38,7 +38,11 @@ function Home() {
    * Retrieve all products when user is landing to this page
    */
   useEffect(() => {
-    GetAllProducts().then((result) => setProducts(result));
+    GetAllProducts().then((result) => 
+    {
+      setProducts(result);
+      setShowProducts(result)
+    })
   }, []);
 
   /**
@@ -227,16 +231,14 @@ function Home() {
       <div className="p-2">
         {searchScrumMaster.length != 0 && (
           <p>
-            Search for Scrum Master {" "}
-           [<span>{searchScrumMaster}</span>] - {" "}
+            Search for Scrum Master [<span>{searchScrumMaster}</span>] -{" "}
             {showProducts.length} result(s)
           </p>
         )}
 
         {searchDeveloper.length != 0 && (
           <p>
-            Search for Developer  {" "}
-            [<span>{searchDeveloper}</span>] - {" "}
+            Search for Developer [<span>{searchDeveloper}</span>] -{" "}
             {showProducts.length} result(s)
           </p>
         )}
