@@ -2,3 +2,59 @@ select {
   width: 100px;
   height: 29px;
 }
+
+/* Small devices (tablets, 768px and up)
+@media (min-width: @screen-sm-min) {
+  .searchbar {
+    display: flex;
+    border-radius: 5px 5px;
+    border: 1px solid #bfbfbf;
+    padding: 0;
+  }
+  
+  .searchbar-text {
+    background-color: #f2f2f2;
+    display: inline;
+    padding: 8px 12px;
+    border-right: 1px solid #bfbfbf;
+    border-radius: 5px 0 0 5px;
+    maring: 0;
+    width: 38%;
+  }
+  
+  .searchbar-input {
+    display: inline;
+    padding: 7px 10px;
+    border-radius: 0 5px 5px 0;
+    border: none;
+    maring: 0;
+    width: 62%;
+  }  
+} */
+
+
+.searchbar {
+  display: flex;
+  border-radius: 5px 5px;
+  padding: 0;
+}
+
+.searchbar-text {
+  background-color: #f2f2f2;
+  display: inline;
+  padding: 8px 12px;
+  border: 1px solid #bfbfbf;
+  border-radius: 5px 0 0 5px;
+  maring: 0;
+  width: 180px;
+}
+
+.searchbar-input {
+  display: inline;
+  padding: 7px 10px;
+  border-radius: 0 5px 5px 0;
+  border: 1px solid #bfbfbf;
+  border-left: none;
+  maring: 0;
+  width: 60%
+}

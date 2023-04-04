@@ -11,6 +11,9 @@ import ReadOnlyForm from "../components/ReadOnlyForm.js";
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [showProducts, setShowProducts] = useState(products);
+  const [searchScrumMaster, setSearchScrumMaster] = useState("");
+  const [searchDeveloper, setSearchDeveloper] = useState("");
   const [editProductId, setEditProductId] = useState(null);
   const [editable, setEditable] = useState(false);
   const [editableFormData, setEditFormData] = useState({
@@ -49,7 +52,6 @@ function Home() {
 
   /**
    * Retrieve data from each field of a modified form
-   * @param {*} e handleSave
    */
   const handleEditFormChange = (e) => {
     e.preventDefault();
@@ -81,7 +83,9 @@ function Home() {
       GetAllProducts().then((result) => setProducts(result));
       window.location.reload();
     } else {
-      console.log("All fields must be filled! The number of developers is up to 5.");
+      console.log(
+        "All fields must be filled! The number of developers is up to 5."
+      );
     }
   };
 
@@ -152,16 +156,90 @@ function Home() {
       GetAllProducts().then((result) => setProducts(result));
       window.location.reload();
     } else {
-      console.log("All fields must be filled! The number of developers is up to 5");
+      console.log(
+        "All fields must be filled! The number of developers is up to 5"
+      );
     }
+  };
+
+  const handleSearchScrumMaster = (str) => {
+    setSearchDeveloper("");
+    setSearchScrumMaster(str);
+    let filteredResults = [];
+
+    if (str.length > 0) {
+      filteredResults = products.filter((product) =>
+        product.scrumMasterName.toLowerCase().includes(str)
+      );
+    }
+
+    setShowProducts(filteredResults);
+  };
+
+  const handleSearchDeveloper = (str) => {
+    setSearchScrumMaster("");
+    setSearchDeveloper(str);
+    let filteredResults = [];
+
+    if (str.length > 0) {
+      filteredResults = products.filter((product) =>
+        product.Developers.toLowerCase().includes(str)
+      );
+    }
+
+    setShowProducts(filteredResults);
   };
 
   return (
     <div className="container p-3 bg-white">
-      <div>
-        <h5 className="text-uppercase px-1 pb-2">
-          Total Products: {products.length}
-        </h5>
+      <h5 className="text-uppercase px-1 pb-2 mr-5">
+        Total Products: {products.length}
+      </h5>
+
+      <div className="d-lg-flex justify-content-md-between">
+        <div className="searchbar mr-5 w-100 w-lg-50">
+          <div className="searchbar-text">
+            <span>Search Scrum Master</span>
+          </div>
+          <input
+            className="searchbar-input"
+            type="text"
+            placeholder="Search for a Scrum Master..."
+            value={searchScrumMaster}
+            onChange={(e) => handleSearchScrumMaster(e.target.value)}
+          />
+        </div>
+
+        <div className="searchbar mr-5 w-100 w-md-50">
+          <div className="searchbar-text">
+            <span>Search Developer</span>
+          </div>
+          <input
+            className="searchbar-input"
+            type="text"
+            placeholder="Search for a Developer..."
+            value={searchDeveloper}
+            onChange={(e) => handleSearchDeveloper(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="p-2">
+        {searchScrumMaster.length != 0 && (
+          <p>
+            Search for Scrum Master {" "}
+           [<span>{searchScrumMaster}</span>] - {" "}
+            {showProducts.length} result(s)
+          </p>
+        )}
+
+        {searchDeveloper.length != 0 && (
+          <p>
+            Search for Developer  {" "}
+            [<span>{searchDeveloper}</span>] - {" "}
+            {showProducts.length} result(s)
+          </p>
+        )}
       </div>
 
       {/* Product list view with modify and delete functions */}
@@ -180,14 +258,29 @@ function Home() {
             </tr>
           </thead>
           <tbody className="overflow-auto position: relative;">
-                <NewForm newFormData={newFormData} handleAddFormChange={handleAddFormChange} handleAddClick={handleAddClick} handleClearClick={handleClearClick}/>
+            <NewForm
+              newFormData={newFormData}
+              handleAddFormChange={handleAddFormChange}
+              handleAddClick={handleAddClick}
+              handleClearClick={handleClearClick}
+            />
 
-            {products.map((product) => (
+            {showProducts.map((product) => (
               <Fragment key={product.productId}>
                 {editable && editProductId === product.productId ? (
-                  <EditableForm product={product} editableFormData={editableFormData} handleEditFormChange={handleEditFormChange} handleSaveClick={handleSaveClick} handleCancelClick={handleCancelClick}/>
+                  <EditableForm
+                    product={product}
+                    editableFormData={editableFormData}
+                    handleEditFormChange={handleEditFormChange}
+                    handleSaveClick={handleSaveClick}
+                    handleCancelClick={handleCancelClick}
+                  />
                 ) : (
-                  <ReadOnlyForm product={product} handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick}/>
+                  <ReadOnlyForm
+                    product={product}
+                    handleEditClick={handleEditClick}
+                    handleDeleteClick={handleDeleteClick}
+                  />
                 )}
               </Fragment>
             ))}
