@@ -38,12 +38,11 @@ function Home() {
    * Retrieve all products when user is landing to this page
    */
   useEffect(() => {
-    GetAllProducts().then((result) => 
-    {
+    GetAllProducts().then((result) => {
       setProducts(result);
-      setShowProducts(result)
-    })
-  }, [products.length]);
+    });
+    setShowProducts(products);
+  }, [products.length, showProducts]);
 
   /**
    * Edit a product after clicking the edit button
@@ -85,7 +84,8 @@ function Home() {
       setEditable(false);
       UpdateProduct(updatedFormData);
       GetAllProducts().then((result) => setProducts(result));
-      window.location.reload();
+      setShowProducts(products)
+      //window.location.reload();
     } else {
       console.log(
         "All fields must be filled! The number of developers is up to 5."
@@ -111,7 +111,7 @@ function Home() {
         console.log(result);
       } else {
         GetAllProducts().then((result) => setProducts(result));
-        setShowProducts(products)
+        setShowProducts(products);
       }
     });
   };
@@ -159,6 +159,7 @@ function Home() {
     ) {
       AddNewProduct(newFormData);
       GetAllProducts().then((result) => setProducts(result));
+      setShowProducts(products)
       window.location.reload();
     } else {
       console.log(
