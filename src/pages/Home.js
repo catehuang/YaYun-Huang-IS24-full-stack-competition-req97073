@@ -42,7 +42,8 @@ function Home() {
       setProducts(result);
     });
     setShowProducts(products);
-  }, [products.length, showProducts]);
+    // eslint-disable-next-line
+  }, [products.length]);
 
   /**
    * Edit a product after clicking the edit button
@@ -85,7 +86,7 @@ function Home() {
       UpdateProduct(updatedFormData);
       GetAllProducts().then((result) => setProducts(result));
       setShowProducts(products)
-      //window.location.reload();
+      window.location.reload(true);
     } else {
       console.log(
         "All fields must be filled! The number of developers is up to 5."
@@ -160,7 +161,7 @@ function Home() {
       AddNewProduct(newFormData);
       GetAllProducts().then((result) => setProducts(result));
       setShowProducts(products)
-      window.location.reload();
+      window.location.reload(true);
     } else {
       console.log(
         "All fields must be filled! The number of developers is up to 5"
