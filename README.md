@@ -13,3 +13,9 @@
 * Unauthorized users can edit product related information except the product Id
 * Can search for a specific Scrum Master and see all products related to the Scrum Master and a total number of related products
 * Can search for a specific developer and see all products related to the developer and a total number of related products
+
+
+## URLs
+* The endpoint of API is http://localhost:3000/api
+* The URL for Swagger documentation is http://localhost:3000/api/api-docs
+* The landing/home page is http://localhost:3001
