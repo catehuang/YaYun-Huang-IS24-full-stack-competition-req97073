@@ -43,7 +43,7 @@ function Home() {
       setProducts(result);
       setShowProducts(result)
     })
-  }, []);
+  }, [products.length]);
 
   /**
    * Edit a product after clicking the edit button
@@ -111,6 +111,7 @@ function Home() {
         console.log(result);
       } else {
         GetAllProducts().then((result) => setProducts(result));
+        setShowProducts(products)
       }
     });
   };
@@ -229,14 +230,14 @@ function Home() {
       </div>
 
       <div className="p-2">
-        {searchScrumMaster.length != 0 && (
+        {searchScrumMaster.length !== 0 && (
           <p>
             Search for Scrum Master [<span>{searchScrumMaster}</span>] -{" "}
             {showProducts.length} result(s)
           </p>
         )}
 
-        {searchDeveloper.length != 0 && (
+        {searchDeveloper.length !== 0 && (
           <p>
             Search for Developer [<span>{searchDeveloper}</span>] -{" "}
             {showProducts.length} result(s)
